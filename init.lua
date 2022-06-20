@@ -21,11 +21,12 @@ minetest.register_chatcommand(
 
       local info = item:get_short_description() or "[Description not found.]"
 
-      local message = \
-        "=== Item: ===\n" .. \
-        "Name:  " .. item:get_name() .. "\n" .. \
-        "Count: " .. item:get_count() .. "\n" .. \
-        "Info:  " .. info .. "\n" .. \
+      local message =
+        "=== Item: ===\n" ..
+        "Name: "  .. item:get_name()  .. "\n" ..
+        "Count: " .. item:get_count() .. "\n" ..
+        "Wear: "  .. item:get_wear()  .. "\n" ..
+        "Info: "  .. info             .. "\n" ..
         "=== End ==="
 
       minetest.chat_send_player(name, message)
@@ -50,6 +51,10 @@ minetest.register_chatcommand(
 
       item:set_count(item:get_stack_max())
       item:set_wear(0)
+
+      if not player:set_wielded_item(item) then
+        minetest.chat_send_player(name, "Failed to set wielded item!")
+      end
 
       return true
     end
