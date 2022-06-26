@@ -49,8 +49,10 @@ minetest.register_chatcommand(
         return true
       end
 
+      local new_wear = (params ~= "" and tonumber(string.match(params, "%d[%d,]*"))) or 0
+
       item:set_count(item:get_stack_max())
-      item:set_wear(0)
+      item:set_wear(new_wear)
 
       if not player:set_wielded_item(item) then
         minetest.chat_send_player(name, "Failed to set wielded item!")
@@ -72,6 +74,55 @@ minetest.register_chatcommand(
       else
         minetest.chat_send_player(name, "Command failed: Can't find hunger_ng.")
       end
+
+      return true
+    end
+  }
+)
+
+minetest.register_chatcommand(
+  "QOL_boost",
+  {
+    privs = {fast = true},
+    func = function (name, params)
+      local axis = string.match(params, "^(%a)")
+      local dist = string.match(params, "^[^%s]+%s+(-?[%d,.]+)")
+
+      if not axis or axis == "" then axis = "y" end
+      if not dist or dist == "" then dist = 10  end
+
+      axis = string.lower(axis)
+      dist = tonumber(dist)
+
+      minetest.chat_send_all("Axis: " .. axis .. ", Dist: " .. dist)
+
+      local player = minetest.get_player_by_name(name)
+
+      local op = player:get_pos()
+      local np =
+        axis == "x" and {x = op.x + dist, y = op.y, z = op.z} or
+        axis == "y" and {x = op.x, y = op.y + dist, z = op.z} or
+        axis == "z" and {x = op.x, y = op.y, z = op.z + dist} or
+        op
+
+      player:set_pos(np)
+
+      return true
+    end
+  }
+)
+
+minetest.register_chatcommand(
+  "QOL_whosthere",
+  {
+    func = function (name, params)
+      local message = ""
+
+      for _, p in ipairs(minetest.get_connected_players()) do
+        message = message .. "- " .. p:get_player_name() .. "\n"
+      end
+
+      minetest.chat_send_player(name, "Connected players:\n" .. message .. "(End)")
 
       return true
     end
