@@ -94,8 +94,6 @@ minetest.register_chatcommand(
       axis = string.lower(axis)
       dist = tonumber(dist)
 
-      minetest.chat_send_all("Axis: " .. axis .. ", Dist: " .. dist)
-
       local player = minetest.get_player_by_name(name)
 
       local op = player:get_pos()
