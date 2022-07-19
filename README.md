@@ -8,6 +8,9 @@ Test if connection is working and mod is loaded.
 ### `/QOL_description`
 Gives name, count, wear, and description of wielded item.
 
+### `/QOL_rename name`
+Changes description of wielded item to rename it.
+
 ### `/QOL_refill [wear]`
 Refills wielded itemstack to maximum stack size, sets wear to `wear` (if provided) if item is a tool.
 May not work for power tools which store extra metadata.
