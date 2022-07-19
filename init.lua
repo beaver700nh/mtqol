@@ -36,6 +36,25 @@ minetest.register_chatcommand(
   }
 )
 
+
+minetest.register_chatcommand(
+  "QOL_rename",
+  {
+    func = function (name, params)
+      local player = minetest.get_player_by_name(name)
+      local item = player:get_wielded_item()
+      if item:is_empty() then
+        minetest.chat_send_player(name, "Can't rename because you aren't holding anything!")
+        return true
+      end
+      item:get_meta():set_string("description", params)
+      player:set_wielded_item(item) 
+
+      return true
+    end
+  }
+)
+
 minetest.register_chatcommand(
   "QOL_refill",
   {
